@@ -1,4 +1,4 @@
-% % Ç°ÌáÊÇÓÐ½Ç¶È²âÁ¿µÄ·½Ê½£¬ÄÇÃ´¾Í±È½ÏÓÐÐ§
+% % Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Ð½Ç¶È²ï¿½ï¿½ï¿½ï¿½Ä·ï¿½Ê½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½Í±È½ï¿½ï¿½ï¿½Ð§
 clear all;
 close all;
 N = 30;
@@ -7,6 +7,7 @@ sf = 200;
 [qTrue,gyro] = genTrig(N,sf);
 qMea = genMea(qTrue);
 q0 = mulQua1(qTrue(1,:),expQua([pi,0,0]));
+
 
 %%
 dt = 1/sf;
@@ -29,7 +30,7 @@ U.vMeaStd = [0.1,0.1];
 
 % Q and R
 Q = eye(3)*U.GyroAngleRW^2*dt^2;
-R = eye(3)*U.rvstd^2;%%ÖØÒª
+R = eye(3)*U.rvstd^2;%%ï¿½ï¿½Òª
 
 
 % pre-allocate memory
@@ -46,25 +47,25 @@ P(:,:,1) = eye(3)*U.P0^2;
 % filter iteration
 for nt = 2:Nt
     % integration
-    av = 0.5*(gyro(nt-1,:) + gyro(nt,:));%%ÇóÖÐÎ»Êý
-    qEst(nt,:) = mulQua1(qEst(nt-1,:),expQua(av*dt));%%ÎªºÎ²»ÓÃÐý×ª¾ØÕóµÄ£¿
+    av = 0.5*(gyro(nt-1,:) + gyro(nt,:));%%ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+    qEst(nt,:) = mulQua1(qEst(nt-1,:),expQua(av*dt));%%Îªï¿½Î²ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½Ä£ï¿½
     
     % uncertainty propagation
-%     µÚÒ»ÖÖ
+%     ï¿½ï¿½Ò»ï¿½ï¿½
     F1 = expRot(av*dt)';
-%     µÚ¶þÖÖ
+%     ï¿½Ú¶ï¿½ï¿½ï¿½
     S = omegaMatrix(av*dt);
     normV  = sqrt(S(1,2)^2+S(1,3)^2+S(1,3)^2);
     F2 = eye(3)+sin(normV)/normV*S(:,:)+...
             (1-cos(normV))/normV^2*S(:,:)^2;
-%     µÚÈýÖÖ    
-%%ºÍÂÞµÂÀï¹«Ê½Ò»Ñù£¿
+%     ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    
+%%ï¿½ï¿½ï¿½Þµï¿½ï¿½ï¹«Ê½Ò»ï¿½ï¿½ï¿½ï¿½
     rotation_part = av*dt;
     rotation_part = rotation_part';
-    %%Àî´úÊýÖ¸ÊýÓ³ÉäµÄ´óÐ¡
-    theta = sqrt(rotation_part'*rotation_part);         % ÇóµÄÊÇÏòÁ¿µÄÄ£
-    %%ÊµÏÖµÄÊ±ºòÏÈ¼ÆËã³ö1/theta£¬È»ºóÊ¹ÓÃ³Ë·¨Ìæ»»ÏÂÃæËùÓÐµÄ³ý·¨¡£
-    a = rotation_part/theta;            % Õâ¸öÊÇÊ²Ã´£¿
+    %%ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ó³ï¿½ï¿½Ä´ï¿½Ð¡
+    theta = sqrt(rotation_part'*rotation_part);         % ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£
+    %%Êµï¿½Öµï¿½Ê±ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½ï¿½1/thetaï¿½ï¿½È»ï¿½ï¿½Ê¹ï¿½Ã³Ë·ï¿½ï¿½æ»»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÄ³ï¿½ï¿½ï¿½ï¿½ï¿½
+    a = rotation_part/theta;            % ï¿½ï¿½ï¿½ï¿½ï¿½Ê²Ã´ï¿½ï¿½
     c = cos(theta);
     s = sin(theta);
     F3 = c*eye(3)+(1-c)*a*a'+s*omegaMatrix(a);
@@ -73,13 +74,13 @@ for nt = 2:Nt
     F = F1;
     P(:,:,nt) = F*P(:,:,nt-1)*F'+Q;
     % update
-    K = P(:,:,nt)*(P(:,:,nt)+R)^-1;     %%KÊ¼ÖÕÊÇ3Î¬µÄ£¬Õâ¸öºÍÐ­·½²îµÄÐÔÖÊÏà¹ØµÄ
+    K = P(:,:,nt)*(P(:,:,nt)+R)^-1;     %%KÊ¼ï¿½ï¿½ï¿½ï¿½3Î¬ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½
     dv = K * logQua1(mulQua1(invQua1(qEst(nt,:)),qMea(nt,:)))';
     qEst(nt,:) = mulQua1(qEst(nt,:),expQua(dv)');
     P(:,:,nt) = (eye(3)-K)*P(:,:,nt);
 end
 
-%% ´úÂëÄ³Ò»²¿·ÖÊÇ´æÔÚÎÊÌâµÄ£¬ÔÝÇÒ²»¹Ü
+%% ï¿½ï¿½ï¿½ï¿½Ä³Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½
 l1 = sum(qEst - qTrue,2);
 l2 = sum(qEst + qTrue,2);
 if abs(sum(l1(end-5:end)))<0.1
@@ -100,7 +101,7 @@ plot(qMea - qTrue);
 
 %% 
 function [ q ] = mulQua1( q1, q2)
-% ¼ÆËãÁ½¸öµ¥Î»ËÄÔªÊýµÄ³Ë·¨
+% ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½Ôªï¿½ï¿½ï¿½Ä³Ë·ï¿½
 q1 = q1';
 q2 = q2';
 % multiplicate
@@ -112,7 +113,7 @@ q = q';
 end
 
 function [ v, u, theta ] = logQua1( q )
-% ËÄÔªÊýµÄ¶ÔÊýÓ³Éä
+% ï¿½ï¿½Ôªï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½Ó³ï¿½ï¿½
 % check size and unitness
 q = q';
 % calculate log
