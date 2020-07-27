@@ -8,6 +8,7 @@ sf = 200;
 qMea = genMea(qTrue);
 q0 = mulQua1(qTrue(1,:),expQua([pi,0,0]));
 
+%% fuck you
 
 %%
 dt = 1/sf;
